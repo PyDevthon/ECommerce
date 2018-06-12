@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Welcome
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 15vh;">
+    <h4 style="text-align: center;margin-bottom: 5vh">Images</h4>
+    <div class="row">
+        {% for img in product.image_set.all %}
+            <!--Card-->
+            	<div class="col-sm-4 mx-auto">
+          <div class="card">
+  <img class="card-img-top" src="/{{ img.image.url }}" alt="Card image">
+ <div class="card-body text-center">
+                <!--Category & Title-->
+                <a href="" class="grey-text">
+                  <h5>{{ img.name }}</h5>
+                </a>
+  </div>
+</div>
+                </div>
+          {% endfor %}
+      </div>
+</div>
+<div class="container d-flex justify-content-center">
+
+    <button type="submit" class="btn btn-info mt-5"><strong style="font-size: large">Interested?</strong></button>
+
+</div>
+    <div class="container" style="margin-top: 5vh">
+    <h5 style="text-align: center">{{ product.description }}</h5>
+</div>
+
+{% endblock %}
