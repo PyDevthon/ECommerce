@@ -24,6 +24,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class Image(models.Model):
     name = models.TextField(null=False, blank=False)
@@ -37,7 +40,11 @@ class Image(models.Model):
 class Contact(models.Model):
     name = models.CharField(max_length=50, blank=False, null=False)
     phone = models.CharField(max_length=10, blank=False, null=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     comments = models.TextField()
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('-id',)

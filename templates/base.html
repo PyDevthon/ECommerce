@@ -3,6 +3,8 @@
 {% bootstrap_jquery %}
 {% bootstrap_javascript %}
 {% load static %}
+{% load Tags %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +23,7 @@
   <!-- Bootstrap core CSS -->
 
   <!-- Material Design Bootstrap -->
-  <link href={% static 'Ecommerce-Template-Bootstrap-master/css/mdb.min.css' %} rel="stylesheet">
+  <link href="{% static 'Ecommerce-Template-Bootstrap-master/css/mdb.min.css' %}" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="{% static 'Ecommerce-Template-Bootstrap-master/css/style.min.css' %}" rel="stylesheet">
   <style type="text/css">

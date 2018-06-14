@@ -1,4 +1,5 @@
 from django import template
+from Store.forms import ContactForm
 
 register = template.Library()
 
@@ -17,3 +18,9 @@ def length(value, limit):
         return value[:limit] + '..'
     else:
         return value
+
+
+@register.inclusion_tag('ContactForm.html', takes_context=True)
+def contact(context):
+    context['form'] = ContactForm()
+    return context
