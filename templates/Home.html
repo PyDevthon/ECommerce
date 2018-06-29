@@ -166,6 +166,16 @@
       <!--/.Navbar-->
 
       <!--Section: Products v.3-->
+       <h3 class="d-flex justify-content-center">Plot</h3>
+      <div class="container d-flex justify-content-center">
+      <span style="display:inline;" class="mx-auto">
+<button class="btn btn-primary" id="login-form">Click to Plot</button>
+       <button class="btn btn-primary" id="hide">Click to hide</button>
+</div>
+        </span>
+ <div id="bokeh">
+
+ </div>
     <div class="container">
       <div class="row">
 
@@ -206,7 +216,68 @@
 {% bootstrap_paginate page_obj range=9 %}
 </div>
     </div>
+    <script type="text/javascript">
+
+            // Submit post on submit
+$('#login-form').on('click', function(event){
+    event.preventDefault();
+    console.log("checking Plot!")  // sanity check
+    if ($("#bokeh").find(".bk-root").length > 0){
+
+    $("#bokeh").show();
+    console.log("Plot exits");
+
+    }else {
+
+    console.log("Creating Plot");
+    create_plot();
+
+    }
+
+});
+
+function create_plot() {
+    console.log("Making Request") // sanity check
+    $.ajax({
+        url : "{% url 'Bokeh' %}", // the endpoint
+        type : "get", // http method
+       // data sent with the post request
+
+        // handle a successful response
+        success : function(data) {
+            console.log("success"); // another sanity check
+            $('#bokeh').html(data["div"])
+            $('head').append(data["script"])
+
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log("something went wrong");
+
+
+        }
+    });
+};
+
+    </script>
+    <script type="text/javascript">
+
+      $('#hide').click(function (){
+
+    if ($("#bokeh").find(".bk-root").length > 0){
+
+    $("#bokeh").hide();
+    console.log("Plot Hidden");
+
+    }
+
+      }
+
+      );
+
+    </script>
   </main>
-  <!--Main layout-->
+
 
 {% endblock %}

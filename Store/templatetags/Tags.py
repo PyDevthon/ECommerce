@@ -1,5 +1,5 @@
 from django import template
-from Store.forms import ContactForm
+from Store.forms import ContactForm, LoginForm
 
 register = template.Library()
 
@@ -24,3 +24,10 @@ def length(value, limit):
 def contact(context):
     context['form'] = ContactForm()
     return context
+
+
+@register.inclusion_tag('registration/login.html', takes_context=True)
+def login(context):
+    context['login_form'] = LoginForm()
+    return context
+

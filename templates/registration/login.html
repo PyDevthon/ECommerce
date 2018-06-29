@@ -1,44 +1,43 @@
-{% load static %}
 
 <!-- The Modal -->
 
-<div class="modal" id="myModal">
+<div class="modal" id="LoginModal">
   <div class="modal-dialog">
     <div class="modal-content">
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">We will get back to you!</h4>
+        <h4 class="modal-title">Login</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
       <!-- Modal body -->
       <div class="modal-body">
-        <form method="post" action="" id="post-from">
+        <form method="post" action="" id="login-form">
             {% csrf_token %}
             <div class="form-group">
-    <label for="name">Name:</label>
-    {{ form.name }}
+    <label for="name">User Name</label>
+    {{ login_form.username }}
   </div>
-  <div class="form-group" id="phone">
-    <label for="phone">Phone No:</label>
-    {{ form.phone }}
-  </div>
-  <div class="form-group">
-    <label for="comments">Comments:</label>
-    {{ form.comments }}
+  <div class="form-group" id="pass">
+    <label for="phone">password</label>
+    {{ login_form.password }}
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+          <div class="errors">
+
+          </div>
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_button">Close</button>
+                    <a href="" class="btn btn-primary">Sign-Up</a>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" id="close_button_login">Close</button>
       </div>
 <script type="text/javascript">
             // Submit post on submit
-$('#post-from').on('submit', function(event){
+$('#login-form').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check
     create_post();
@@ -47,19 +46,18 @@ $('#post-from').on('submit', function(event){
 function create_post() {
     console.log("create post is working!") // sanity check
     $.ajax({
-        url : "{% url 'api_create_contact' %}", // the endpoint
+        url : "{% url 'login' %}", // the endpoint
         type : "POST", // http method
-        data : { name : $('#id_name').val(), phone: $('#id_phone').val(), comments: $('#id_comments').val(), product_id:{{product.id}}, csrfmiddlewaretoken: '{{ csrf_token }}'}, // data sent with the post request
+        data : { username : $('#id_username').val(), password: $('#id_password').val(), csrfmiddlewaretoken: '{{ csrf_token }}'}, // data sent with the post request
 
         // handle a successful response
         success : function(json) {
-            $('#id_name').val('');
-             $('#pid_enroll_no').val('');
-             $('#ccourse').val('');// remove the value from the input
+            $('#id_username').val('');
+             $('#id_password').val('');
             console.log(json); // log the returned json to the console
             console.log("success"); // another sanity check
-            $("#close_button").click()
-            $.toaster({ priority : 'danger', title:'Alert', message:'Sucessfully Posted' });
+            $("#close_button_login").click()
+            window.
 
         },
 
@@ -68,15 +66,10 @@ function create_post() {
             $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
                 " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
             console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            var errors = JSON.parse(xhr.responseText);
-            console.log(errors)
-            console.log("toaster")
-                $(".errors").remove()
-            $.each(errors, function(n, elem) {
-            $("#"+n).append("<p class='errors d-flex justify-content-center'>"+elem+"</p>")
+            $(".msg").remove()
+            $(".errors").append("<p class='msg d-flex justify-content-center' style='color:red'>Wrong UserName/Password</p>")
 
-});
-$(".errors").css({ 'color': "red" });
+
         }
     });
 };

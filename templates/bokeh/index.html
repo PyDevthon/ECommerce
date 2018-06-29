@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Bokeh Scatter Plots</title>
+<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.js"></script>
+<link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.13.0.min.css">
+
+
+
+ </head>
+ <body>
+ <p>Plot</p>
+
+ <div id="bokeh">
+
+ </div>
+
+<button id="login-form">Click to Plot</button>
+ <button id="hide">Click to hide</button>
+</body>
+            // Submit post on submit
+$('#login-form').on('submit', function(event){
+    event.preventDefault();
+    console.log("form submitted!")  // sanity check
+    create_post();
+});
+
+function create_post() {
+    console.log("create post is working!") // sanity check
+    $.ajax({
+        url : "{% url 'login' %}", // the endpoint
+        type : "get", // http method
+      , // data sent with the post request
+
+        // handle a successful response
+        success : function(data) {
+          // log the returned json to the console
+            console.log("success"); // another sanity check
+            $('#bokeh').html(data["div"]
+            $('head').append(data["script"]
+
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            $(".msg").remove()
+            $(".errors").append("<p class='msg d-flex justify-content-center' style='color:red'>Wrong UserName/Password</p>")
+
+
+        }
+    });
+};
+
+</html>

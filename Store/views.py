@@ -1,6 +1,15 @@
 from django.views import generic
 from .models import Product, CATEGORIES, Contact
-from .forms import ContactForm
+from .forms import ContactForm, LoginForm
+from django.contrib.auth.views import LoginView, login, logout
+from django.http import JsonResponse
+from django.urls import reverse_lazy
+from django.shortcuts import HttpResponseRedirect, render
+
+# Bokeh
+
+from bokeh.plotting import figure, output_file, show
+from bokeh.embed import components
 
 
 class Home(generic.ListView):
@@ -56,3 +65,44 @@ class ViewContact(generic.ListView):
 
     def get_queryset(self):
         return Contact.objects.all()
+
+
+class UserLogin(LoginView):
+    template_name = 'registration/login.html'
+    form_class = LoginForm
+    success_url = reverse_lazy('Home_Page')
+
+    def form_valid(self, form):
+        login(self.request, form.get_user())
+        return JsonResponse({'Message': 'Success'}, status=200)
+
+    def form_invalid(self, form):
+        return JsonResponse({'data': form.errors.as_text()}, status=404)
+
+
+class UserLogout(generic.View):
+
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class BokehView(generic.View):
+
+    def get(self, request):
+        x = Product.objects.get_categories()
+        y = Product.objects.get_count()
+
+        p = figure(x_range=x, plot_height=500, title="Product Counts", plot_width=1000)
+        p.vbar(x=x, top=[x[1] for x in y], width=0.1)
+
+        p.xgrid.grid_line_color = None
+        p.y_range.start = 0
+
+        # Store components
+        script, div = components(p)
+
+        data = {'script': script, 'div': div}
+
+        # Feed them to the Django template.
+        return JsonResponse(data=data)
