@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+import random
 
 CATEGORIES = [('SOFAS & LOUNGERS', 'SOFAS & LOUNGERS'), ('SETTEES & BENCHES', 'SETTEES & BENCHES'),
               ('ACCENT CHAIRS', 'ACCENT CHAIRS'), ('FOLDING CHAIRS', 'FOLDING CHAIRS'),
@@ -15,11 +17,28 @@ CATEGORIES = [('SOFAS & LOUNGERS', 'SOFAS & LOUNGERS'), ('SETTEES & BENCHES', 'S
               ('OUTDOOR FURNITURE', 'OUTDOOR FURNITURE')]
 
 
+class PlotManager(models.Manager):
+    def get_categories(self):
+        items = []
+        for x in Product.objects.all():
+            if x.category not in items:
+                items.append(x.category)
+        return items
+
+    def get_count(self):
+        value_count = []
+        labels = self.get_categories()
+        for x in labels:
+            value_count.append((x, Product.objects.filter(category=x).count()))
+        return value_count
+
+
 class Product(models.Model):
     name = models.TextField(blank=False, null=False)
     price = models.CharField(max_length=1000, blank=False, null=False)
     description = models.TextField(null=True, blank=True)
     category = models.TextField(choices=CATEGORIES, blank=False, null=False)
+    objects = PlotManager()
 
     def __str__(self):
         return self.name
@@ -48,3 +67,8 @@ class Contact(models.Model):
 
     class Meta:
         ordering = ('-id',)
+
+
+class Cart(models.Model):
+    user = models.ManyToManyField(User)
+    item = models.ManyToManyField(Product)
